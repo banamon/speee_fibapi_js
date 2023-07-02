@@ -16,4 +16,9 @@ app.get('/', (req, res) => {
 });
 
 // ポート3000でサーバを立てる
-app.listen(3000, () => console.log('Listening on port 3000'));
+// app.listen(3000, () => console.log('Listening on port 3000'));
+
+const PORT=process.env.PORT || 3000;
+app.listen(PORT,()=>{
+    console.log("listening server")
+})
