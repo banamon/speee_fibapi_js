@@ -6,7 +6,16 @@ const app = express();
 
 app.get('/fib', (req, res) => {
   const n = req.query.n;
-  console.log(req);
+
+  // ERR判定
+  if(isNaN(n) || n < 1){
+    res.status(400).json({
+      'message': 'Bad Request',
+    })
+    return;
+  }
+
+
   const response = {
     result: fibonacci(n)
   };
