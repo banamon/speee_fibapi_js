@@ -1,7 +1,4 @@
-// expressモジュールを読み込む
 const express = require('express');
-
-// expressアプリを生成する
 const app = express();
 
 app.get('/fib', (req, res) => {
@@ -11,6 +8,11 @@ app.get('/fib', (req, res) => {
   if(isNaN(n) || n < 1){
     res.status(400).json({
       'message': 'Bad Request',
+    })
+    return;
+  }else if(n > 102){
+    res.status(400).json({
+      'message': 'The Request is too long',
     })
     return;
   }
@@ -27,14 +29,24 @@ app.listen(PORT,()=>{
     console.log("listening server")
 })
 
+/**
+ * 指定番号目のフィボナッチ数の取得
+ * @param {*} n 取得するフィボナッチ数のインデックス
+ * @returns n番目のフィボナッチ数
+ */
 function fibonacci(n) {
   // 行列の定義
   const matrix = [[1, 1], [1, 0]];
 
-  // 行列の累乗を計算する関数
+  /**
+   * 行列累乗計算
+   * @param {*} mat 行列1 
+   * @param {*} p 累乗
+   * @returns 行列matのp乗の計算結果
+   */
   function matrixPower(mat, p) {
     if (p === 0) {
-      return [[1, 0], [0, 1]]; // 単位行列を返す
+      return [[1, 0], [0, 1]];
     }
 
     if (p % 2 === 0) {
@@ -47,7 +59,12 @@ function fibonacci(n) {
     }
   }
 
-  // 2つの行列の積を計算する関数
+  /**
+   * 行列積計算
+   * @param {*} mat1 行列1
+   * @param {*} mat2 行列2
+   * @returns 行列1と行列2の積
+   */
   function matrixMultiply(mat1, mat2) {
     const result = [];
     for (let i = 0; i < mat1.length; i++) {
@@ -66,6 +83,6 @@ function fibonacci(n) {
   // 初期行列を計算
   const initialMatrix = matrixPower(matrix, n - 1);
 
-  // フィボナッチ数を取得
+  // フィボナッチ数を返す
   return initialMatrix[0][0];
 }
