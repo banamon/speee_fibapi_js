@@ -6,18 +6,19 @@ app.get('/fib', (req, res) => {
   const n = req.query.n;
 
   // ERR判定
-  if(isNaN(n) || n < 1){
+  if(isNaN(n) || n < 1|| (n%1.0 != 0)){
     res.status(400).json({
+      "status": 400,
       'message': 'Bad Request',
     })
     return;
-  }else if(n > 102){
+  }else if(n > 102 || Number.isSafeInteger(n)){
     res.status(400).json({
+      "status": 400,
       'message': 'The Request is too long',
     })
     return;
   }
-
 
   const response = {
     result: getfib.fibonacci(n)

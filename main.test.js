@@ -1,20 +1,60 @@
-const express = require('express');
-const request = require('supertest');
 
-const app = express();
+const axios = require('axios');
+const url = "https://agile-beach-57940-72240a29fe8f.herokuapp.com/";
+// const url = "http://localhost:3000/";
 
-test('フィボナッチ数を返すテスト', async () => {
-  const response = await  request(app).get('/fib').query({ n: 10 });
-  expect(response.status).toBe(200); // ステータスコードが正常であることを確認
-  expect(response.body).toEqual({ result: 55 });
-})
+test('n=10のフィボナッチ数取得', async () => {
+  const response = await axios.get(url + "fib?n=10");
+  expect(response.status).toBe(200);
+  expect(response.data).toEqual({ result: 55 });
+});
 
-test('負の値の入力に対するテスト', async () => {
-  const response = await  request(app).get('/fib').query({ n: -1 });
-  expect(response.status).toBe(400); // ステータスコードが正常であることを確認
-  expect(response.body).toEqual({ message: "Bad Request" });
-})
+test('負の入力に対するテスト', async () => {
+  try{
+    const response = await axios.get(url + "fib?n=-1");
+    throw new Error('Expected an error response.');
+  }catch(e){
+    expect(e.response.status).toBe(400);
+    expect(e.response.data).toEqual({ status: 400, message: "Bad Request" });
+  }
+});
 
-// 数値以外場合
-// 入力がない場合
-// 大きすぎる入力
+test('整数以外に対するテスト', async () => {
+  try{
+    const response = await axios.get(url + "fib?n=1.1");
+    throw new Error('Expected an error response.');
+  }catch(e){
+    expect(e.response.status).toBe(400);
+    expect(e.response.data).toEqual({ status: 400, message: "Bad Request" });
+  }
+});
+
+test('数値以外に対するテスト', async () => {
+  try{
+    const response = await axios.get(url + "fib?n=a");
+    throw new Error('Expected an error response.');
+  }catch(e){
+    expect(e.response.status).toBe(400);
+    expect(e.response.data).toEqual({ status: 400, message: "Bad Request" });
+  }
+});
+
+test('入力がない場合対するテスト', async () => {
+  try{
+    const response = await axios.get(url + "fib");
+    throw new Error('Expected an error response.');
+  }catch(e){
+    expect(e.response.status).toBe(400);
+    expect(e.response.data).toEqual({ status: 400, message: "Bad Request" });
+  }
+});
+
+test('大きすぎる入力テスト', async () => {
+  try{
+    const response = await axios.get(url + "fib?n=103");
+    throw new Error('Expected an error response.');
+  }catch(e){
+    expect(e.response.status).toBe(400);
+    expect(e.response.data).toEqual({ status: 400, message: "The Request is too long" });
+  }
+});
