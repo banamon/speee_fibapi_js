@@ -18,6 +18,10 @@ C:\Users> curl -X GET -H "Content-Type: application/json" "https://agile-beach-5
 ```
 speee_fibapi_js
 ├node_modules
+├main.test.js
+├getfib.js
 └main.js
 ```
 
+main.jsでGETを受け付け，フィボナッチ数をgetfib.js側で処理するようにしています．
+また，テストはmain.test.jsで行うことを想定しています．
